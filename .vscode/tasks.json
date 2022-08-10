@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "mkdebug",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "linuxDebug"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "mkrelease",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "linuxRelease"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        }
+    ]
+}
