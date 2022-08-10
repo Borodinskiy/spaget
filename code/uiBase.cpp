@@ -35,7 +35,8 @@ UI::UI(WindowEvents& window_events, UIEvents& ui_events,  sf::Vector2f position,
 UI::~UI()
 {}
 
-void update() {}
+void update() 
+{}
 
 void UI::updateElements()
 {
