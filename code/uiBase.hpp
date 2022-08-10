@@ -10,8 +10,12 @@ public:
     UI(WindowEvents& window_events, sf::Vector2f position, sf::Vector2f size);
     ~UI();
 
-protected:
+    
     virtual void updateElements();
+
+protected:
+
+    void refresh(unsigned int type = 0);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

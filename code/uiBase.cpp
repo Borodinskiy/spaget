@@ -16,6 +16,13 @@ void UI::updateElements()
 	m_fone.setSize(getSize());
 }
 
+void UI::refresh(unsigned int type)
+{
+	TransForm::refresh(type);
+
+	updateElements();
+}
+
 void UI::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_fone, states);

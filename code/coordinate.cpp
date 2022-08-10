@@ -18,77 +18,70 @@ void TransForm::setupAlignmentByView(sf::View view)
     a_h = view.getSize().y;
     a_x = view.getCenter().x - a_w / 2.f;
     a_y = view.getCenter().y - a_h / 2.f;
+    refresh(POSITON);
 }
 
 void TransForm::setAlignmentPosition(sf::Vector2f position)
 {
     a_x = position.x;
     a_y = position.y;
+    refresh(POSITON);
 }
 
 void TransForm::setAlignmentSize(sf::Vector2f size)
 {
     a_w = size.x;
     a_h = size.y;
+    refresh(POSITON);
 }
 
 void TransForm::setAlignmentPoint(unsigned int point)
 {
     a_point = point;
+    refresh(POSITON);
 }
 
-void TransForm::setPosition(sf::Vector2f position, bool withAlignment)
+void TransForm::setPosition(sf::Vector2f position)
 {
     l_x = position.x;
     l_y = position.y;
 
-    if (withAlignment)
+    switch (a_point)
     {
-        switch (a_point)
-        {
-        default:       x = l_x + a_x;                         y = l_y + a_y;                         break;
-        case LEFT:     x = l_x + a_x;                         y = l_y + a_y + a_h / 2.f - l_h / 2.f; break;
-        case LEFT_BOT: x = l_x + a_x;                         y = l_y + a_y + a_h - l_h;             break;
-        case TOP:      x = l_x + a_x + a_w / 2.f - l_w / 2.f; y = l_y + a_y;                         break;
-        case CENTER:   x = l_x + a_x + a_w / 2.f - l_w / 2.f; y = l_y + a_y + a_h / 2.f - l_h / 2.f; break;
-        case BOT:      x = l_x + a_x + a_w / 2.f - l_w / 2.f; y = l_y + a_y + a_h - l_h;             break;
-        case RIGHT_TOP:x = l_x + a_x + a_w - l_w;             y = l_y + a_y;                         break;
-        case RIGHT:    x = l_x + a_x + a_w - l_w;             y = l_y + a_y + a_h / 2.f - l_h / 2.f; break;
-        case RIGHT_BOT:x = l_x + a_x + a_w - l_w;             y = l_y + a_y + a_h - l_h;             break;
-        };
-    }
-    else
-    {
-        x = l_x;
-        y = l_y;
-    }
+    default:       x = l_x + a_x;                         y = l_y + a_y;                         break;
+    case LEFT:     x = l_x + a_x;                         y = l_y + a_y + a_h / 2.f - h / 2.f; break;
+    case LEFT_BOT: x = l_x + a_x;                         y = l_y + a_y + a_h - h;             break;
+    case TOP:      x = l_x + a_x + a_w / 2.f - w / 2.f; y = l_y + a_y;                         break;
+    case CENTER:   x = l_x + a_x + a_w / 2.f - w / 2.f; y = l_y + a_y + a_h / 2.f - h / 2.f; break;
+    case BOT:      x = l_x + a_x + a_w / 2.f - w / 2.f; y = l_y + a_y + a_h - h;             break;
+    case RIGHT_TOP:x = l_x + a_x + a_w - w;             y = l_y + a_y;                         break;
+    case RIGHT:    x = l_x + a_x + a_w - w;             y = l_y + a_y + a_h / 2.f - h / 2.f; break;
+    case RIGHT_BOT:x = l_x + a_x + a_w - w;             y = l_y + a_y + a_h - h;             break;
+    };
 
     x *= f_x;
-    y *= f_x;
+    y *= f_y;
 }
 
-void TransForm::setSize(sf::Vector2f size, bool withScaleFactor)
+void TransForm::setSize(sf::Vector2f size)
 {
     l_w = size.x;
     l_h = size.y;
-    if (withScaleFactor)
-    {
-        w = l_w * f_w;
-        h = l_h * f_h;
-    }
-    else
-    {
-        w = l_w;
-        h = l_h;
-    }
+
+    w = l_w * f_w;
+    h = l_h * f_h;
+
+    refresh(POSITON);
 }
 
-void TransForm::setScale(sf::Vector2f scale)
+void TransForm::setScale(float scale)
 {
-//  f_x = scale.x;
-//  f_y = scale.y;
-    f_w = scale.x;
-    f_h = scale.y;
+    f_x = scale;
+    f_y = scale;
+    f_w = scale;
+    f_h = scale;
+
+    refresh();
 }
 
 sf::Vector2f TransForm::getAlignmentPosition()
@@ -118,7 +111,20 @@ sf::Vector2f TransForm::getSize()
     return { w, h };
 }
 
+sf::Vector2f TransForm::getLocalSize()
+{
+    return { l_w, l_h };
+}
+
 sf::FloatRect TransForm::getScale()
 {
 	return { f_x, f_y, f_w, f_h};
+}
+
+void TransForm::refresh(unsigned int type)
+{
+    if (!type || type == POSITON)
+        setPosition(getLocalPosition());
+    if (!type || type == SIZE)
+        setSize(getLocalSize());
 }

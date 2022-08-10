@@ -30,11 +30,11 @@ public:
 
     void setAlignmentPoint(unsigned int point);
 
-    void setPosition(sf::Vector2f position, bool withAlignment = true);
+    void setPosition(sf::Vector2f position);
 
-    void setSize(sf::Vector2f size, bool withAlignment = true);
+    void setSize(sf::Vector2f size);
 
-    void setScale(sf::Vector2f scale);
+    void setScale(float scale);
 
     sf::Vector2f getAlignmentPosition();
 
@@ -47,12 +47,25 @@ public:
     sf::Vector2f getLocalPosition();   
     
     sf::Vector2f getSize();
+
+    sf::Vector2f getLocalSize();
     
     sf::FloatRect getScale();
 
-private:
+protected:
+    //Calls every time, when other transform's elements need to change (example: correct position, when size changes)
+    virtual void refresh(unsigned int type = 0);
 
 protected:
+
+    enum REFRESH_TYPE
+    {
+        ALL = 0,
+        POSITON,
+        SIZE
+
+    };
+
     //alignment's rect bounds
     float a_x, a_y, a_w, a_h;
     //object local bounds

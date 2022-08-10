@@ -29,6 +29,7 @@ int main()
     for (unsigned int i = 0; i < 9; i++)
     {
         uis.push_back(UI(wlistener.getEventsList(), { 0.f, 0.f }, {128.f, 64.f }));
+        uis[i].setScale(1.f);
         uis[i].setupAlignmentByView(window.getView());
         uis[i].setAlignmentPoint(i);
     }
