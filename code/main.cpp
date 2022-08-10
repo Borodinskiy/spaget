@@ -3,7 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "windowListener.hpp"
-#include "uiBase.hpp"
+#include "button.hpp"
 
 int main()
 {
@@ -23,15 +23,18 @@ int main()
     window.setVerticalSyncEnabled(true);
 //    window.setFramerateLimit(60);
 
-    std::vector<UI> uis;
+    UIEvents uievents;
+    UIEvent storage;
+
+    std::vector<UI*> uis;
     uis.reserve(9);
 
     for (unsigned int i = 0; i < 9; i++)
     {
-        uis.push_back(UI(wlistener.getEventsList(), { 0.f, 0.f }, {128.f, 64.f }));
-        uis[i].setScale(1.f);
-        uis[i].setupAlignmentByView(window.getView());
-        uis[i].setAlignmentPoint(i);
+        uis.push_back(new UIButton(wlistener.getEventsList(), uievents, { 0.f, 0.f }, {128.f, 64.f }));
+        uis[i]->setScale(1.f);
+        uis[i]->setupAlignmentByView(window.getView());
+        uis[i]->setAlignmentPoint(i);
     }
 
     sf::Font font;
@@ -46,7 +49,7 @@ int main()
         {
             for (unsigned int i = 0; i < 9; i++)
             {
-                uis[i].setupAlignmentByView(window.getView());
+                uis[i]->setupAlignmentByView(window.getView());
             }
         }
 
@@ -60,12 +63,23 @@ int main()
             };
         }
 
+        while (uievents.pollEvent(storage))
+        {
+            switch (storage.id)
+            {
+            case stringHash("close"):
+                window.close();
+                break;
+            };
+        };
+        
+
         window.clear();
 
-        for (auto ui : uis)
-            window.draw(ui);
+        for (auto& ui : uis)
+            window.draw(*ui);
 
-        log.setString("mouse x,y - " + std::to_string(wlistener.getEventsList().mouse_position_raw.x) + ", " + std::to_string(wlistener.getEventsList().mouse_position_raw.y));
+        log.setString("fps - " + std::to_string((int)(1.f / wlistener.getEventsList().frametime))  +"\nmouse x,y - " + std::to_string(wlistener.getEventsList().mouse_position_raw.x) + ", " + std::to_string(wlistener.getEventsList().mouse_position_raw.y));
         window.draw(log);
 
         window.display();   

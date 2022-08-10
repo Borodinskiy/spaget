@@ -123,8 +123,14 @@ sf::FloatRect TransForm::getScale()
 
 void TransForm::refresh(unsigned int type)
 {
-    if (!type || type == POSITON)
+    switch (type)
+    {
+    case POSITON:
         setPosition(getLocalPosition());
-    if (!type || type == SIZE)
+        break;
+    case SIZE:
+    default:
         setSize(getLocalSize());
+        break;
+    };
 }

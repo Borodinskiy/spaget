@@ -18,7 +18,6 @@ enum ALIGNMENT
 class TransForm
 {
 public:
-
     TransForm(float l_x = 0, float l_y = 0, float l_w = 0, float l_h = 0);
     ~TransForm();
 
@@ -57,7 +56,6 @@ protected:
     virtual void refresh(unsigned int type = 0);
 
 protected:
-
     enum REFRESH_TYPE
     {
         ALL = 0,
