@@ -35,6 +35,11 @@ UI::UI(WindowEvents& window_events, UIEvents& ui_events,  sf::Vector2f position,
 UI::~UI()
 {}
 
+void update()
+{
+	
+}
+
 void UI::updateElements()
 {
 	m_fone.setPosition(getPosition());

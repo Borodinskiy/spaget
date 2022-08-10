@@ -40,6 +40,8 @@ public:
     ~UI();
 
     
+    virtual void update();
+
     virtual void updateElements();
 
 protected:
