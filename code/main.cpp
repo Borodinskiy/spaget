@@ -5,6 +5,8 @@
 #include "windowListener.hpp"
 #include "button.hpp"
 
+#define DEFAULT_VIEW_SIZE sf::Vector2f(1280.f, 720.f)
+
 int main()
 {
 #ifdef _DEBUG
@@ -18,7 +20,7 @@ int main()
     WindowListener wlistener(window);
     
     icon.loadFromFile("data/icon.png");
-    window.create(sf::VideoMode(1280U, 720U), "Spaget");
+    window.create(sf::VideoMode(DEFAULT_VIEW_SIZE.x, DEFAULT_VIEW_SIZE.y), "Spaget");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setVerticalSyncEnabled(true);
 //    window.setFramerateLimit(60);
@@ -32,9 +34,22 @@ int main()
     for (unsigned int i = 0; i < 9; i++)
     {
         uis.push_back(new UIButton(wlistener.getEventsList(), uievents, { 0.f, 0.f }, {128.f, 64.f }));
-        uis[i]->setScale(1.f);
+        uis[i]->setScale({ window.getView().getSize().x / DEFAULT_VIEW_SIZE.x, window.getView().getSize().y / DEFAULT_VIEW_SIZE.y });
         uis[i]->setupAlignmentByView(window.getView());
-        uis[i]->setAlignmentPoint(i);
+        switch (i)
+        {
+        case 3:
+            uis[i]->setPosition({ 0.f, -68.f });
+            uis[i]->setAlignmentPoint(CENTER);
+            break;
+        case 5:
+            uis[i]->setPosition({ 0.f, 68.f });
+            uis[i]->setAlignmentPoint(CENTER);
+            break;
+        default:
+            uis[i]->setAlignmentPoint(i);
+            break;
+        }
     }
 
     sf::Font font;
@@ -49,6 +64,7 @@ int main()
         {
             for (unsigned int i = 0; i < 9; i++)
             {
+                uis[i]->setScale({window.getView().getSize().x / DEFAULT_VIEW_SIZE.x, window.getView().getSize().y / DEFAULT_VIEW_SIZE.y});
                 uis[i]->setupAlignmentByView(window.getView());
             }
         }
@@ -72,12 +88,14 @@ int main()
                 break;
             };
         };
-        
 
         window.clear();
 
         for (auto& ui : uis)
+        {
+            ui->update();
             window.draw(*ui);
+        }
 
         log.setString("fps - " + std::to_string((int)(1.f / wlistener.getEventsList().frametime))  +"\nmouse x,y - " + std::to_string(wlistener.getEventsList().mouse_position_raw.x) + ", " + std::to_string(wlistener.getEventsList().mouse_position_raw.y));
         window.draw(log);

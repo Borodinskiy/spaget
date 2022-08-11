@@ -23,23 +23,34 @@ public:
 
     void setupAlignmentByView(sf::View view);
 
+    void setAlignmentBounds(sf::FloatRect bounds);
+
     void setAlignmentPosition(sf::Vector2f position);
 
     void setAlignmentSize(sf::Vector2f size);
 
     void setAlignmentPoint(unsigned int point);
 
+    void setBounds(sf::FloatRect bounds);
+
     void setPosition(sf::Vector2f position);
 
     void setSize(sf::Vector2f size);
 
-    void setScale(float scale);
+    void setScale(sf::Vector2f scale);
+    void setScale(float size);
+
+    sf::FloatRect getAlignmentBounds();
 
     sf::Vector2f getAlignmentPosition();
 
     sf::Vector2f getAlignmentSize();
 
     unsigned int getAlignmentPoint();
+
+    sf::FloatRect getBounds();
+    
+    sf::FloatRect getLocalBounds();
 
     sf::Vector2f getPosition();
     

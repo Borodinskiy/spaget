@@ -40,19 +40,16 @@ public:
     ~UI();
 
     
-    virtual void update();
+    virtual void update() {}
 
-    virtual void updateElements();
+    virtual void updateElements() {}
 
 protected:
     void refresh(unsigned int type = 0);
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {}
 
 protected:
-    WindowEvents& w_events;
-    UIEvents&    ui_events;
-
-    sf::RectangleShape m_fone;
-
+    WindowEvents& win_events;
+    UIEvents&      ui_events;
 };

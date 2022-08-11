@@ -6,11 +6,21 @@ UIButton::UIButton(WindowEvents &window_events, UIEvents &ui_events, sf::Vector2
     b_fone.resize(4);
     b_fone.setPrimitiveType(sf::Quads);
     for (unsigned int i = 0; i < 4; i++)
-        b_fone[i].color = {50 * i, 50 * i, 50 * i};
+        b_fone[i].color = { 128, 90, 34 };
 }
 
 UIButton::~UIButton()
 {
+}
+
+void UIButton::update()
+{
+    if (getBounds().contains(win_events.mouse_position))
+        for (unsigned int i = 0; i < 4; i++)
+            b_fone[i].color = { 100, 100, 100 };
+    else
+        for (unsigned int i = 0; i < 4; i++)
+            b_fone[i].color = { 128, 90, 34 };
 }
 
 void UIButton::updateElements()

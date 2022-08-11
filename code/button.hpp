@@ -7,6 +7,8 @@ public:
     UIButton(WindowEvents &window_events, UIEvents &ui_events, sf::Vector2f position, sf::Vector2f size);
     ~UIButton();
 
+    void update();
+
     void updateElements();
 
 private:
@@ -14,4 +16,5 @@ private:
 
 private:
     sf::VertexArray b_fone;
+    sf::Text        b_text;
 };
