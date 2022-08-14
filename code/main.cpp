@@ -28,6 +28,10 @@ int main()
     UIEvents uievents;
     UIEvent storage;
 
+    sf::Texture texture;
+    texture.loadFromFile("data/tex/greuare-window.png");
+    UISprite uitex(texture, { 64U, 64U });
+
     std::vector<UI*> uis;
     uis.reserve(9);
 
@@ -99,6 +103,8 @@ int main()
 
         log.setString("fps - " + std::to_string((int)(1.f / wlistener.getEventsList().frametime))  +"\nmouse x,y - " + std::to_string(wlistener.getEventsList().mouse_position_raw.x) + ", " + std::to_string(wlistener.getEventsList().mouse_position_raw.y));
         window.draw(log);
+
+        window.draw(uitex);
 
         window.display();   
     }
