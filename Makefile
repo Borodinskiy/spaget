@@ -28,7 +28,7 @@ all: linuxRelease
 linuxDebug:
 	@clear
 	@echo Compiling Debug version for Linux via g++
-	g++ -fdiagnostics-color=always -g $(defines) $(defines-d) $(include) $(tocompil) $(libs-d) -o $(outfol)/$(name)_debug
+	g++ -fdiagnostics-color=always -g $(defines) $(defines-d) $(include) $(tocompil) $(libs-r) -o $(outfol)/$(name)_debug
 	@echo Done
 linuxRelease:
 	@clear

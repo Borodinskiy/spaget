@@ -1,41 +1,32 @@
 #pragma once
 #include "uiBase.hpp"
+#include "SFML/Audio/Sound.hpp"
 
-class UISprite : public sf::Drawable
+namespace UINAMESPACE
 {
-public:
-    UISprite(sf::Texture& texture, sf::Vector2u tilesize);
-    ~UISprite();
+    using namespace UINAMESPACE;
 
-    void initialize();
-    void setSize(sf::Vector2f s);
+    extern sf::SoundBuffer* BUTTON_SOUND;
 
-private:
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+    class Button : public WidgetExecutable
+    {
+    public:
+        Button(sf::Text label);
 
-private:
-    sf::Image m_image;
-    sf::Texture& m_tex;
-    sf::VertexArray m_fone;
 
-    sf::Vector2u m_tilesize;
-    std::list<sf::IntRect> m_tilerects;
-};
+    private:
+        void onRefreshBounds();
 
-class UIButton : public UI
-{
-public:
-    UIButton(WindowEvents &window_events, UIEvents &ui_events, sf::Vector2f position, sf::Vector2f size);
-    ~UIButton();
+        void onUpdate();
+        void onHoverChange();
+        void onPressedChange(int button_index);
+        void onClick(int clicked_button);
 
-    void update();
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    void updateElements();
-
-private:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-private:
-    sf::VertexArray b_fone;
-    sf::Text        b_text;
+    private:
+        sf::RectangleShape b_fone;
+        sf::Text           b_text;
+        sf::Sound          b_sound;
+    };
 };

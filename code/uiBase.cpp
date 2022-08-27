@@ -1,41 +1,77 @@
 #include "uiBase.hpp"
 
-UIEvents::UIEvents()
+using namespace UINAMESPACE;
+
+WindowEvents* WidgetExecutable::default_window_events;
+EventsHandler* WidgetExecutable::default_events_handler;
+
+Event::Event(const char *str)
+	: id{stringHash(str)}
 {}
-UIEvents::~UIEvents()
+Event::Event(unsigned int id)
+	: id{id}
 {}
 
-bool UIEvents::receiveEvent(UIEvent event)
+EventsHandler::EventsHandler()
+{}
+EventsHandler::~EventsHandler()
+{}
+bool EventsHandler::addEvent(Event event)
 {
-	events.push_back(event);
+	m_events.push_back(event);
 	return true;
 }
-
-bool UIEvents::pollEvent(UIEvent& storage)
+bool EventsHandler::pollEvent(Event& storage)
 {
-	if (events.size() > 0)
+	if (m_events.size() > 0)
 	{
-		storage = *(events.begin());
-		events.pop_front();
+		storage = *(m_events.begin());
+		m_events.pop_front();
 		return true;
 	}
 	return false;
 }
-
-UI::UI(WindowEvents& window_events, UIEvents& ui_events,  sf::Vector2f position, sf::Vector2f size)
-	: TransForm(position.x, position.y, size.x, size.y)
-	, win_events{window_events}
-	, ui_events{ui_events}
+EventsList& EventsHandler::getEventsList()
 {
-	refresh();
+	return m_events;
 }
 
-UI::~UI()
+Widget::Widget()
+	: TransForm()
 {}
 
-void UI::refresh(unsigned int type)
+WidgetExecutable::WidgetExecutable(WindowEvents& window_events, EventsHandler& events_handler)
+	: Widget()
+	, w_events{window_events}
+	, e_handler{events_handler}
+	, m_hovered{}
+	, m_pressed{}
+{}
+void WidgetExecutable::setDefaultWindowEventsLink(WindowEvents* window_events)
 {
-	TransForm::refresh(type);
-
-	updateElements();
+	default_window_events = window_events;
+}
+void WidgetExecutable::setDefaultEventHandlerLink(EventsHandler* events_handler)
+{
+	default_events_handler = events_handler;
+}
+void WidgetExecutable::update()
+{
+	if (m_hovered != getBounds().contains(w_events.mouse_position)) 
+	{
+		m_hovered = !m_hovered;
+		if (m_pressed && !m_hovered)
+			m_pressed = false;
+		onHoverChange();
+	}
+	if (m_hovered && m_pressed != (m_hovered && w_events.mouse_pressed))
+	{
+		m_pressed = !m_pressed;
+		onPressedChange(w_events.mouse_down_buttonindex);
+	}
+	if (m_hovered && w_events.mouse_up)
+	{
+		onClick(w_events.mouse_up_buttonindex);
+	}
+	onUpdate();
 }

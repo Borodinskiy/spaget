@@ -1,24 +1,38 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/View.hpp>
 
-enum ALIGNMENT
+
+namespace ALIGN
 {
-    LEFT_TOP = 0,
-    LEFT,
-    LEFT_BOT,
-    TOP,
-    CENTER,
-    BOT,
-    RIGHT_TOP,
-    RIGHT,
-    RIGHT_BOT
-};
+    enum
+    {
+        LEFT_TOP = 0,
+        LEFT,
+        LEFT_BOT,
+        TOP,
+        CENTER,
+        BOT,
+        RIGHT_TOP,
+        RIGHT,
+        RIGHT_BOT
+    };
+}
+
+namespace REFRESH_TYPE
+{
+    enum
+    {
+        ALL = 0,
+        POSITION,
+        SIZE
+    };
+}
 
 //Transformable form (aka Mr. Bons//(aka Bounds))
 class TransForm
 {
 public:
-    TransForm(float l_x = 0, float l_y = 0, float l_w = 0, float l_h = 0);
+    TransForm(float x = 0, float y = 0, float width = 0, float height = 0);
     ~TransForm();
 
     void setupAlignmentByView(sf::View view);
@@ -63,17 +77,12 @@ public:
     sf::FloatRect getScale();
 
 protected:
-    //Calls every time, when other transform's elements need to change (example: correct position, when size changes)
-    virtual void refresh(unsigned int type = 0);
+    //Calls every time, when changing bounds. Use in child classes
+    virtual void onRefreshBounds() = 0;
+    //Calls every time, when changing bounds. Used by main class
+    void refreshBounds(int refresh_type = REFRESH_TYPE::ALL);
 
 protected:
-    enum REFRESH_TYPE
-    {
-        ALL = 0,
-        POSITON,
-        SIZE
-
-    };
 
     //alignment's rect bounds
     float a_x, a_y, a_w, a_h;

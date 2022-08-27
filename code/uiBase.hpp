@@ -4,6 +4,8 @@
 #include "windowListener.hpp"
 #include "coordinate.hpp"
 
+#define UINAMESPACE ui
+
 constexpr unsigned int stringHash(const char *string)
 {
     unsigned int i = 0, hash = 0;
@@ -11,45 +13,80 @@ constexpr unsigned int stringHash(const char *string)
         hash += (unsigned int)string[i];
 
     return hash + i;
-}
-
-struct UIEvent
-{
-    unsigned int id;
 };
 
-
-class UIEvents
+namespace UINAMESPACE
 {
-public:
-    UIEvents();
-    ~UIEvents();
+    struct Event
+    {
+        Event(const char *str);
+        Event(unsigned int id = 0);
 
-    bool receiveEvent(UIEvent event);
-    //If have unreaded events, returns true and handling event info to "storage" variable
-    bool pollEvent(UIEvent& storage);
+        unsigned int id;
+    };
+    typedef std::list<Event> EventsList;
 
-private:
-    std::list<UIEvent> events;
-};
+    class EventsHandler
+    {
+    public:
+        EventsHandler();
+        ~EventsHandler();
+        //Add new event to list. Can be handled by pollEvent method
+        bool addEvent(Event event);
+        //If have unreaded events, returns true and writing event info to "storage" variable
+        bool pollEvent(Event& storage);
+        //Return link to list of events
+        EventsList& getEventsList();
 
-class UI: public TransForm, public sf::Drawable
-{
-public:
-    UI(WindowEvents& window_events, UIEvents& ui_events, sf::Vector2f position, sf::Vector2f size);
-    ~UI();
+    private:
+        EventsList m_events;
+    };
+    //main class for any ui element
+    class Widget : public TransForm, public sf::Drawable
+    {
+        public:
+            Widget();
 
-    
-    virtual void update() {}
+            virtual void update() = 0;
 
-    virtual void updateElements() {}
+    };
+    //Widget, but with event functions (from window and ui)
+    class WidgetExecutable : public Widget
+    {
+        public:
+            WidgetExecutable(WindowEvents& window_events = *default_window_events, EventsHandler& events_handler = *default_events_handler);
+            void update();
 
-protected:
-    void refresh(unsigned int type = 0);
+            static void setDefaultWindowEventsLink(WindowEvents* window_events);
+            static void setDefaultEventHandlerLink(EventsHandler* events_handler);
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {}
+        private:
+            virtual void onUpdate() {}
+            virtual void onHoverChange() {}
+            virtual void onPressedChange(int button_index) {}
+            virtual void onClick(int button_index) {}
 
-protected:
-    WindowEvents& win_events;
-    UIEvents&      ui_events;
+        protected:
+            static WindowEvents* default_window_events;
+            static EventsHandler* default_events_handler;
+        
+            WindowEvents& w_events;
+            EventsHandler& e_handler;
+
+            // bounds contains a mouse?
+            bool m_hovered;
+            // bounds contains a mouse, and she is pressed?
+            bool m_pressed;
+    };
+    typedef std::list<Widget> WidgetsList;
+
+    //storage for ui elements
+    class Container
+    {
+        public:
+            Container();
+            ~Container();
+
+        private:
+    };
 };

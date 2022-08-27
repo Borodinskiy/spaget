@@ -1,82 +1,84 @@
 #include "button.hpp"
 
-UISprite::UISprite(sf::Texture &texture, sf::Vector2u tilesize)
-    : m_tex{texture}
-    , m_tilesize{tilesize}
-{
-    m_image = m_tex.copyToImage();
-    m_fone.resize(9 * 4);
-    m_fone.setPrimitiveType(sf::Quads);
-}
+sf::SoundBuffer *UINAMESPACE::BUTTON_SOUND{};
 
-UISprite::~UISprite()
+using namespace UINAMESPACE;
+
+const int PREFERED_MOUSE_BUTTON{sf::Mouse::Left};
+
+const float OUTLINE_THICKNESS{4.f};
+
+const sf::Color DEFAULT_FILL{120, 20, 30};
+const sf::Color DEFAULT_OUTLINE{DEFAULT_FILL};
+const sf::Color DEFAULT_TEXT{sf::Color::White};
+
+const sf::Color HIGHLIGHT_FILL{60,  10, 15 };
+const sf::Color HIGHLIGHT_OUTLINE{255, 20, 30};
+const sf::Color HIGHLIGHT_TEXT{HIGHLIGHT_OUTLINE};
+
+const sf::Color PRESSED_FILL{HIGHLIGHT_FILL};
+const sf::Color PRESSED_OUTLINE{HIGHLIGHT_FILL};
+const sf::Color PRESSED_TEXT{sf::Color::Black};
+
+Button::Button(sf::Text label)
+    : b_text{label}
+    , b_fone{}
+    , b_sound{*BUTTON_SOUND}
+{
+    onHoverChange();
+}
+void Button::onRefreshBounds()
+{
+    b_fone.setOutlineThickness(OUTLINE_THICKNESS * getScale().left);
+
+    sf::Vector2f outline_thickness{OUTLINE_THICKNESS, OUTLINE_THICKNESS};
+    b_fone.setPosition(getPosition() + outline_thickness);
+    b_fone.setSize(getSize() - outline_thickness * 2.f);
+
+    b_text.setPosition(getPosition() + getSize() / 2.f - sf::Vector2f(b_text.getGlobalBounds().width / 2.f, b_text.getCharacterSize() / 1.5f ));
+}
+void Button::onUpdate()
 {}
-
-void UISprite::initialize()
+void Button::onHoverChange()
 {
-    m_tilerects.clear();
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-        {
-            sf::Vector2i used_size{};
-
-            for (unsigned int y = 0; y < 64U; y++)
-                for (unsigned int x = 0; x < 64U; x++)
-                {
-                    if (m_image.getPixel(x, y).a != 0)
-                    {
-                        if (used_size.x < (int)x)
-                            used_size.x = (int)x;
-                        if (used_size.y < (int)y)
-                            used_size.y = (int)y;
-                    }
-                }
-            m_tilerects.push_back({ m_tilesize.x * j, m_tilesize.y * i, used_size.x, used_size.y });
-            auto t = *(--m_tilerects.end());
-            m_fone[i * j    ].texCoords = { t.left, t.top };
-            m_fone[i * j + 1].texCoords = { t.left + t.width, t.top };
-            m_fone[i * j + 2].texCoords = { t.left + t.width, t.top + t.height };
-            m_fone[i * j + 3].texCoords = { t.left, t.top + t.height };
-        }
-}
-
-void UISprite::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    target.draw(m_fone, states);
-}
-
-UIButton::UIButton(WindowEvents &window_events, UIEvents &ui_events, sf::Vector2f position, sf::Vector2f size)
-    : UI(window_events, ui_events, position, size)
-{
-    b_fone.resize(4);
-    b_fone.setPrimitiveType(sf::Quads);
-    for (unsigned int i = 0; i < 4; i++)
-        b_fone[i].color = { 128, 90, 34 };
-}
-
-UIButton::~UIButton()
-{
-}
-
-void UIButton::update()
-{
-    if (getBounds().contains(win_events.mouse_position))
-        for (unsigned int i = 0; i < 4; i++)
-            b_fone[i].color = { 100, 100, 100 };
+    if (m_hovered)
+    {
+        b_fone.setFillColor(HIGHLIGHT_FILL);
+        b_fone.setOutlineColor(HIGHLIGHT_OUTLINE);
+        b_text.setFillColor(HIGHLIGHT_TEXT);
+    }
     else
-        for (unsigned int i = 0; i < 4; i++)
-            b_fone[i].color = { 128, 90, 34 };
+    {
+        b_fone.setFillColor(DEFAULT_FILL);
+        b_fone.setOutlineColor(DEFAULT_OUTLINE);
+        b_text.setFillColor(DEFAULT_TEXT);
+    }
 }
-
-void UIButton::updateElements()
+void Button::onPressedChange(int button_index)
 {
-    b_fone[0].position = getPosition();
-    b_fone[1].position = getPosition() + sf::Vector2f(w, 0.f);
-    b_fone[2].position = getPosition() + getSize();
-    b_fone[3].position = getPosition() + sf::Vector2f(0.f, h);
+    if (m_pressed && button_index == PREFERED_MOUSE_BUTTON)
+    {
+        b_fone.setFillColor(PRESSED_FILL);
+        b_fone.setOutlineColor(PRESSED_OUTLINE);
+        b_text.setFillColor(PRESSED_TEXT);
+    }
+    else
+    {
+        b_fone.setFillColor(HIGHLIGHT_FILL);
+        b_fone.setOutlineColor(HIGHLIGHT_OUTLINE);
+        b_text.setFillColor(HIGHLIGHT_TEXT);
+    }
 }
-
-void UIButton::draw(sf::RenderTarget &target, sf::RenderStates states) const
+void Button::onClick(int clicked_button)
+{
+    if (clicked_button == PREFERED_MOUSE_BUTTON)
+    {
+        b_sound.play();
+        e_handler.addEvent("s");
+    }
+}
+void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(b_fone);
+    target.draw(b_text);
 }
