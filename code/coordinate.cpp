@@ -3,12 +3,13 @@
 using namespace ALIGN;
 using namespace REFRESH_TYPE;
 
-TransForm::TransForm(float l_x, float l_y, float l_w, float l_h)
-    : a_x{}, a_y{}, a_w{}, a_h{}
-    , l_x{l_x}, l_y{l_y}, l_w{l_w}, l_h{l_h}
+//alignr - alignment's rectangle
+TransForm::TransForm(sf::FloatRect bounds, unsigned int align_point, sf::FloatRect alignr)
+    : l_x{bounds.left}, l_y{bounds.top}, l_w{bounds.width}, l_h{bounds.height}
+    , a_x{alignr.left}, a_y{alignr.top}, a_w{alignr.width}, a_h{alignr.height}
     , x{a_x + l_x}, y{a_y + l_y}, w{l_w}, h{l_h}
     , f_x{1.f}, f_y{1.f}, f_w{1.f}, f_h{1.f}
-    , a_point{LEFT_TOP}
+    , a_point{align_point}
 {}
 TransForm::~TransForm()
 {
@@ -87,10 +88,10 @@ void TransForm::setSize(sf::Vector2f size)
 }
 void TransForm::setScale(sf::Vector2f scale)
 {
-    f_x = scale.x;
-    f_y = scale.y;
-    f_w = scale.x;
-    f_h = scale.y;
+    f_x = round(scale.x * 100.f) / 100.f;
+    f_y = round(scale.y * 100.f) / 100.f;
+    f_w = round(scale.x * 100.f) / 100.f;
+    f_h = round(scale.y * 100.f) / 100.f;
 
     refreshBounds();
 }

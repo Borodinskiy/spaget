@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics/View.hpp>
-
+#include <cmath>
 
 namespace ALIGN
 {
@@ -32,7 +32,7 @@ namespace REFRESH_TYPE
 class TransForm
 {
 public:
-    TransForm(float x = 0, float y = 0, float width = 0, float height = 0);
+    TransForm(sf::FloatRect bounds = {}, unsigned int align_point = ALIGN::LEFT_TOP, sf::FloatRect align_rect = {});
     ~TransForm();
 
     void setupAlignmentByView(sf::View view);
@@ -78,7 +78,7 @@ public:
 
 protected:
     //Calls every time, when changing bounds. Use in child classes
-    virtual void onRefreshBounds() = 0;
+    virtual void onRefreshBounds() {}
     //Calls every time, when changing bounds. Used by main class
     void refreshBounds(int refresh_type = REFRESH_TYPE::ALL);
 

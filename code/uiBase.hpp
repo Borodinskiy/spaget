@@ -17,6 +17,11 @@ constexpr unsigned int stringHash(const char *string)
 
 namespace UINAMESPACE
 {
+    class Animator
+    {
+
+    };
+
     struct Event
     {
         Event(const char *str);
@@ -45,7 +50,7 @@ namespace UINAMESPACE
     class Widget : public TransForm, public sf::Drawable
     {
         public:
-            Widget();
+            Widget(sf::FloatRect bounds = {}, unsigned int align_point = ALIGN::LEFT_TOP, sf::FloatRect align_rect = {});
 
             virtual void update() = 0;
 
@@ -53,40 +58,49 @@ namespace UINAMESPACE
     //Widget, but with event functions (from window and ui)
     class WidgetExecutable : public Widget
     {
-        public:
-            WidgetExecutable(WindowEvents& window_events = *default_window_events, EventsHandler& events_handler = *default_events_handler);
-            void update();
-
-            static void setDefaultWindowEventsLink(WindowEvents* window_events);
-            static void setDefaultEventHandlerLink(EventsHandler* events_handler);
-
-        private:
-            virtual void onUpdate() {}
-            virtual void onHoverChange() {}
-            virtual void onPressedChange(int button_index) {}
-            virtual void onClick(int button_index) {}
-
-        protected:
-            static WindowEvents* default_window_events;
-            static EventsHandler* default_events_handler;
+    public:
+        WidgetExecutable(Event event, WindowEvents& events, EventsHandler& handler
+        , sf::FloatRect bounds = {}, unsigned int align_point = ALIGN::LEFT_TOP, sf::FloatRect align_rect = {});
         
-            WindowEvents& w_events;
-            EventsHandler& e_handler;
-
-            // bounds contains a mouse?
-            bool m_hovered;
-            // bounds contains a mouse, and she is pressed?
-            bool m_pressed;
+        void update();
+        void sendEvent();
+        void disable();
+        void enable();
+        Event& getEvent();
+    private:
+        virtual void onUpdate() {}
+        virtual void onHoverChange() {}
+        virtual void onPressedChange(int button_index) {}
+        virtual void onClick(int button_index) {}
+        
+        virtual void onDisable() {}
+        virtual void onEnable() {}
+    protected:        
+        WindowEvents& m_events;
+        EventsHandler& m_handler;
+        Event m_event;
+        bool m_enabled;
+        // bounds contains a mouse?
+        bool m_hovered;
+        // bounds contains a mouse, and she is pressed?
+        bool m_pressed;
     };
-    typedef std::list<Widget> WidgetsList;
-
+    typedef std::list<Widget*> WidgetsList;
     //storage for ui elements
-    class Container
+    class Container : public TransForm, public sf::Drawable
     {
-        public:
-            Container();
-            ~Container();
-
-        private:
+    public:
+        Container(sf::FloatRect bounds = {}, unsigned int aling_point = ALIGN::LEFT_TOP, sf::FloatRect align_rect = {});
+        ~Container();
+        
+        void update();
+        
+        void clear();
+        void addWidget(Widget* widget);
+        WidgetsList& getWidgetsList();
+    private:
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        WidgetsList m_elements;
+        sf::FloatRect m_alignment;
     };
 };
