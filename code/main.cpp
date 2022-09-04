@@ -5,14 +5,29 @@ int main()
 #ifdef _DEBUG
     printf("This is a debug version. Recommended to use release (without _debug in filename)\n\n");
 #endif
+
     sf::RenderWindow window;
     sf::Image icon;
+    if (!icon.loadFromFile("data/icon.png"))
+    {
+        return EXIT_FAILURE;
+    }
 
-    icon.loadFromFile("data/icon.png");
-    window.create(sf::VideoMode(DEFAULT_VIEW_SIZE.x, DEFAULT_VIEW_SIZE.y), "Spaget", sf::Style::Default);
+    sf::VideoMode videomode;
+    sf::Uint32 style;
+    sf::String title;
+#ifdef _DEBUG
+    videomode = {(unsigned int)DEFAULT_VIEW_SIZE.x, (unsigned int)DEFAULT_VIEW_SIZE.y};
+    style = sf::Style::Default;
+    title = "Spaget debug";
+#else
+    videomode = videomode.getDesktopMode();
+    style = sf::Style::Fullscreen;
+    title = "Spaget";
+#endif
+    window.create(videomode, title, style);
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setVerticalSyncEnabled(true);
-//    window.setFramerateLimit(60);
 
     game::Scene* scene = new game::MainMenu(window);
     
@@ -25,9 +40,5 @@ int main()
     while (window.isOpen());
 
     delete scene;
-
-#ifdef _DEBUG
-    printf("This is a final wrotten message before return zero\n\n");
-#endif
     return EXIT_SUCCESS;
 }

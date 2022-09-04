@@ -1,8 +1,7 @@
 #pragma once
-#include "uiBase.hpp"
-#include "button.hpp"
+#include "ui/container.hpp"
+#include "game/level.hpp"
 
-#define GAMENAMESPACE game
 #ifdef _DEBUG
 #define DEFAULT_VIEW_SIZE sf::Vector2f(1280.f, 720.f)
 #else
@@ -46,6 +45,12 @@ namespace GAMENAMESPACE
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     private:
+        bool m_view_changing;
+        sf::Vector2f m_uiscale, m_mouse_position, m_view_center;
+        game::Level level;
+
+        sf::View m_view;
+
         sf::Font m_font;
         ui::EventsHandler m_uihandler;
         ui::Container m_uicontainer;

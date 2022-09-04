@@ -29,7 +29,7 @@ namespace UINAMESPACE
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     private:
-        float b_text_char_size;
+        unsigned int b_text_char_size;
         sf::RectangleShape b_fone;
         LerpingColor       b_fone_color;
         LerpingColor       b_outline_color;

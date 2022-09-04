@@ -18,9 +18,9 @@ const sf::Color HIGHLIGHT_FILL{60,  10, 15 };
 const sf::Color HIGHLIGHT_OUTLINE{255, 20, 30};
 const sf::Color HIGHLIGHT_TEXT{HIGHLIGHT_OUTLINE};
 
-const sf::Color PRESSED_FILL{HIGHLIGHT_FILL};
-const sf::Color PRESSED_OUTLINE{HIGHLIGHT_FILL};
-const sf::Color PRESSED_TEXT{sf::Color::Black};
+const sf::Color PRESSED_FILL{HIGHLIGHT_OUTLINE};
+const sf::Color PRESSED_OUTLINE{HIGHLIGHT_OUTLINE};
+const sf::Color PRESSED_TEXT{HIGHLIGHT_FILL};
 
 Button::
     Button(sf::Text label, Event event, WindowEvents &events, EventsHandler &handler
@@ -30,8 +30,9 @@ Button::
     , b_fone_color{sf::Color::Black, DEFAULT_FILL, 10.f}
     , b_outline_color{sf::Color::Black, DEFAULT_OUTLINE, 10.f}
     , b_text_color{sf::Color::Black, DEFAULT_TEXT, 10.f}
-    , b_text_char_size{b_text.getCharacterSize()}
 {
+    b_text_char_size = b_text.getCharacterSize();
+    onHoverChange();
     refreshBounds(REFRESH_TYPE::ALL);
 }
 
@@ -44,12 +45,12 @@ void Button::onRefreshBounds()
 {
     b_fone.setOutlineThickness(OUTLINE_THICKNESS * getScale().left);
 
-    sf::Vector2f outline_thickness{OUTLINE_THICKNESS, OUTLINE_THICKNESS};
+    sf::Vector2f outline_thickness{OUTLINE_THICKNESS * f_x, OUTLINE_THICKNESS * f_y};
     b_fone.setPosition(getPosition() + outline_thickness);
     b_fone.setSize(getSize() - outline_thickness * 2.f);
 
-    b_text.setScale({getScale().width, getScale().height});
-    b_text.setPosition(roundVector(getPosition() + getSize() / 2.f - sf::Vector2f(b_text.getGlobalBounds().width / 2.f, b_text.getCharacterSize() / 1.5f * f_y )));
+    b_text.setCharacterSize((unsigned int)((float)b_text_char_size * f_x));
+    b_text.setPosition(roundVector(getPosition() + getSize() / 2.f - sf::Vector2f(b_text.getGlobalBounds().width / 2.f, (float)b_text.getCharacterSize() / 1.5f)));
 }
 void Button::onUpdate()
 {

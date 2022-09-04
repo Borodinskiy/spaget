@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=Game;
+Name=Spaget engine
+GenericName=Game engine
+Comment=Run latest build of spaget engine
+Keywords=test;еуые
+Path=/home/borodinskiy/documents/coding/cpp/spaget/out
+Exec=/home/borodinskiy/documents/coding/cpp/spaget/out/spaget
+Icon=/home/borodinskiy/documents/coding/cpp/spaget/out/data/icon.png
+Terminal=false
+StartupNotify=true
+MimeType=
+Type=Application
+
+Actions=debug
+
+[Desktop Action debug]
+Name=Run debug build
+Name[ru]=Запустить тестовую сборку
+Path=/home/borodinskiy/documents/coding/cpp/spaget/out
+Exec=/home/borodinskiy/documents/coding/cpp/spaget/out/spaget_debug

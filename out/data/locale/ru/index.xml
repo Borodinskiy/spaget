@@ -1,0 +1,7 @@
+<?xml version ="1.0" encoding="UTF-8"?>
+<localeinfo>
+    <language name="russian" code="ru"/>
+    <strings>
+        ui.exex="g"
+    </strings>
+</localeinfo>

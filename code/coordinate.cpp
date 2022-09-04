@@ -88,10 +88,10 @@ void TransForm::setSize(sf::Vector2f size)
 }
 void TransForm::setScale(sf::Vector2f scale)
 {
-    f_x = round(scale.x * 100.f) / 100.f;
-    f_y = round(scale.y * 100.f) / 100.f;
-    f_w = round(scale.x * 100.f) / 100.f;
-    f_h = round(scale.y * 100.f) / 100.f;
+    f_x = scale.x;
+    f_y = scale.y;
+    f_w = scale.x;
+    f_h = scale.y;
 
     refreshBounds();
 }

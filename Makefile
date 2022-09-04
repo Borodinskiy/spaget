@@ -1,6 +1,6 @@
 name    := spaget
 outfol  := out
-tocompil:= $(wildcard code/*.cpp)
+tocompil:= $(wildcard code/*.cpp) $(wildcard code/*/*.cpp)
 # -D
 defines  := -DOS_LINUX
 defines-d:= -D_DEBUG
