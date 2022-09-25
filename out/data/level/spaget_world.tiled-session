@@ -1,0 +1,81 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Все файлы (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "sonic/main.tmx": {
+            "scale": 2,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 610.25,
+                "y": 98.5
+            }
+        },
+        "sonic/main.tmx#tile": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "sonic/main.tmx#tiles": {
+            "scaleInDock": 1
+        },
+        "test/main-base64.tmx": {
+            "scale": 1.6587890625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.2109972918875,
+                "y": 256.2109972918875
+            }
+        },
+        "test/main-base64.tmx#tiles": {
+            "scaleInDock": 1
+        },
+        "test/main.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 268.3333333333333,
+                "y": -193.33333333333331
+            }
+        },
+        "test/main.tmx#tiles": {
+            "scaleInDock": 1
+        },
+        "test/main.tmx#tiles2": {
+            "scaleInDock": 1
+        },
+        "test/main2.tmx": {
+            "scale": 0.82939453125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 513.0248439891676,
+                "y": 0
+            }
+        },
+        "test/main2.tmx#tiles": {
+            "scaleInDock": 1
+        },
+        "test/main2.tmx#tiles2": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "/home/borodinskiy/documents/coding/cpp/spaget/out/data/level/test",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+    ],
+    "project": "spaget_world.tiled-project",
+    "recentFiles": [
+        "sonic/main.tmx",
+        "test/main2.tmx",
+        "test/main.tmx"
+    ],
+    "tileset.embedInMap": true
+}
